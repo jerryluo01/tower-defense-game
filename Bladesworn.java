@@ -1,5 +1,3 @@
-// ID: 261238520
-
 package assignment1;
 
 public class Bladesworn extends Warrior {
@@ -9,10 +7,12 @@ public class Bladesworn extends Warrior {
     public static int BASE_ATTACK_DAMAGE;
 
     public Bladesworn(Tile position) {
-        super(position, BASE_HEALTH,  WEAPON_TYPE, BASE_ATTACK_DAMAGE, BASE_COST);
+        super(position, BASE_HEALTH, WEAPON_TYPE, BASE_ATTACK_DAMAGE, BASE_COST);
     }
 
     public int takeAction() {
+        double damageDealt;
+
         Tile currentTile = getPosition();
         Monster monster = currentTile.getMonster();
 
@@ -23,16 +23,15 @@ public class Bladesworn extends Warrior {
                 nextTile.addFighter(this);
             }
         } else {
-            monster.takeDamage(getAttackDamage(), getWeaponType());
-            return skillPoints(monster);
+            damageDealt = monster.takeDamage(getAttackDamage(), getWeaponType());
+            return skillPoints(damageDealt);
 
         }
 
         return 0;
     }
 
-    private int skillPoints(Monster monster) {
-        double damageDealt = monster.takeDamage(getAttackDamage(), getWeaponType());
+    private int skillPoints(double damageDealt) {
         return (int) (getAttackDamage() / damageDealt + 1);
     }
 }
