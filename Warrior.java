@@ -1,5 +1,3 @@
-// ID: 261238520
-
 package assignment1;
 
 public abstract class Warrior extends Fighter {
