@@ -1,5 +1,3 @@
-// ID: 261238520
-
 package assignment1;
 
 public class Monster extends Fighter {
@@ -11,6 +9,7 @@ public class Monster extends Fighter {
     }
 
     public int takeAction() {
+        // Normal action logic:
         Tile currentTile = getPosition();
         Warrior warrior = currentTile.getWarrior();
         Tile nextTile = currentTile.towardTheCastle();
@@ -20,17 +19,33 @@ public class Monster extends Fighter {
             currentTile.removeFighter(this);
             currentTile.addFighter(this);
         } else if (nextTile != null) {
-                currentTile.removeFighter(this);  // improve
-                nextTile.addFighter(this);
+            currentTile.removeFighter(this);
+            nextTile.addFighter(this);
         }
 
         if (this.rageLevel >= BERSERK_THRESHOLD) {
-            takeAction();
+            performExtraAction();
             this.rageLevel = 0;
         }
 
         return 0;
     }
+
+    private void performExtraAction() {
+        Tile currentTile = getPosition();
+        Warrior warrior = currentTile.getWarrior();
+        Tile nextTile = currentTile.towardTheCastle();
+
+        if (warrior != null) {
+            warrior.takeDamage(getAttackDamage(), getWeaponType());
+            currentTile.removeFighter(this);
+            currentTile.addFighter(this);
+        } else if (nextTile != null) {
+            currentTile.removeFighter(this);
+            nextTile.addFighter(this);
+        }
+    }
+
 
     public boolean equals(Object object) {
         if (!super.equals(object)) return false;
@@ -39,7 +54,7 @@ public class Monster extends Fighter {
     }
 
     public double takeDamage(double rawDamage, int attackWeaponType) {
-        double trueDamage = super.takeDamage(getAttackDamage(), getWeaponType());
+        double trueDamage = super.takeDamage(rawDamage, attackWeaponType);
 
         if (attackWeaponType > this.getWeaponType()) {
             this.rageLevel += attackWeaponType - this.getWeaponType();
