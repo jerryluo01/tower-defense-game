@@ -1,11 +1,9 @@
-// ID: 261238520
-
 package assignment1;
 
 public class Axebringer extends Warrior {
     public static double BASE_HEALTH;
     public static int BASE_COST;
-    public static int WEAPON_TYPE;
+    public static int WEAPON_TYPE = 2;
     public static int BASE_ATTACK_DAMAGE;
     private boolean axeThrown;
 
@@ -15,6 +13,8 @@ public class Axebringer extends Warrior {
     }
 
     public int takeAction() {
+        double damageDealt;
+
         if (this.axeThrown) {
             this.axeThrown = false;
             return 0;
@@ -27,19 +27,18 @@ public class Axebringer extends Warrior {
             Tile nextTile = currentTile.towardTheCamp();
             Monster nextMonster = nextTile.getMonster();
             if (nextMonster != null && !nextTile.isCamp()) {
-                nextMonster.takeDamage(getAttackDamage(), getWeaponType());
+                damageDealt = nextMonster.takeDamage(getAttackDamage(), getWeaponType());
                 axeThrown = true;
-                return skillPoints(nextMonster);
+                return skillPoints(damageDealt);
             }
         } else {
-            monster.takeDamage(getAttackDamage(), getWeaponType());
-            return skillPoints(monster);
+            damageDealt = monster.takeDamage(getAttackDamage(), getWeaponType());
+            return skillPoints(damageDealt);
         }
         return 0;
     }
 
-    private int skillPoints(Monster monster) {
-        double damageDealt = monster.takeDamage(getAttackDamage(), getWeaponType());
+    private int skillPoints(double damageDealt) {
         return (int) (getAttackDamage() / damageDealt + 1);
     }
 }
